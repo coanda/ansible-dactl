@@ -39,7 +39,7 @@
   when: ansible_distribution == 'Fedora'
   become: yes
 
-- name: Install python dependencies
+- name: coanda.dactl | Install python dependencies
   pip:
     name:
       - scikit-build
@@ -62,7 +62,7 @@
   args:
     chdir: /tmp/dactl
 
-- name: Install dactl
+- name: coanda.dactl | Install dactl
   shell: ninja -C _build install
   become: yes
   args:
