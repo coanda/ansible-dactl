@@ -1,6 +1,6 @@
 ---
 - name: coanda.dactl | Install dactl dependencies
-  package:
+  dnf:
     name:
       - bison
       - cmake
@@ -48,7 +48,8 @@
     executable: pip3
   become: yes
 
-- git:
+- name: coanda.dactl | Download dactl repository
+  git:
     repo: 'https://github.com/coanda/dactl.git'
     dest: /tmp/dactl
     version: v0.4.3
@@ -64,6 +65,6 @@
 
 - name: coanda.dactl | Install dactl
   shell: ninja -C _build install
-  become: yes
   args:
     chdir: /tmp/dactl
+  become: yes
