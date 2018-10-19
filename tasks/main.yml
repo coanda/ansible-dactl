@@ -1,2 +1,69 @@
 ---
-# tasks file for dactl
+- name: coanda.dactl | Install dactl dependencies
+  package:
+    name:
+      - bison
+      - cmake
+      - flex
+      - gettext
+      - git
+      - python3-pip
+      - libtool
+      - gnome-common
+      - intltool
+      - gcc
+      - vala
+      - glib2-devel
+      - gtk3-devel
+      - libxml2-devel
+      - libgee-devel
+      - json-glib-devel
+      - clutter-devel
+      - clutter-gtk-devel
+      - gsl-devel
+      - gtksourceview3-devel
+      - libmatheval-devel
+      - sqlite-devel
+      - gobject-introspection-devel
+      - gettext-devel
+      - gettext-common-devel
+      - libmodbus-devel
+      - comedilib-devel
+      - librsvg2-devel
+      - python3-devel
+      - pygobject3-devel
+      - libpeas-devel
+      - libsoup-devel
+      - webkitgtk4-devel
+    state: present
+  when: ansible_distribution == 'Fedora'
+  become: yes
+
+- name: Install python dependencies
+  pip:
+    name:
+      - scikit-build
+      - meson
+      - ninja
+    executable: pip3
+  become: yes
+
+- git:
+    repo: 'https://github.com/coanda/dactl.git'
+    dest: /tmp/dactl
+    version: v0.4.3
+
+- name: coanda.dactl | Build dactl
+  shell: |
+    meson --prefix=/usr --libdir=lib _build
+    meson configure -Dwith-tests=false _build
+    ninja -C _build
+    exit 0
+  args:
+    chdir: /tmp/dactl
+
+- name: Install dactl
+  shell: ninja -C _build install
+  become: yes
+  args:
+    chdir: /tmp/dactl
