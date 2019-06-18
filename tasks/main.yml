@@ -1,5 +1,5 @@
 ---
-- name: coanda.dactl | Install dactl dependencies
+- name: coanda.dactl | Install dactl dependencies (Fedora)
   dnf:
     name:
       - bison
@@ -38,6 +38,20 @@
     state: present
   when: ansible_distribution == 'Fedora'
   become: yes
+
+- name: coanda.dactl | Install dactl dependencies (Debian)
+  apt:
+    name:
+      - libgtksourceview-3.0-dev
+      - librsvg2-dev
+      - libpeas-dev
+      - libsoup2.4-dev
+      - libwebkit2gtk-4.0-dev
+      - appstream-util
+    state: present
+  when: ansible_distribution == 'Debian'
+  become: yes
+
 
 - name: coanda.dactl | Install python dependencies
   pip:
